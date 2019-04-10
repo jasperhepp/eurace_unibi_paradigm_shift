@@ -1,12 +1,15 @@
 # The Eurace@Unibi Model
 
-This is the source code of the Eurace@Unibi Model.
+This is the source code of the Eurace@Unibi Model. 
+The original source code is modified and displays the Paradigm Shift Version.
 
 **Version history:**
 
 1.0.0 (April 2014)
 
 1.0.1 (April 2016)
+
+Add-On: Paradigm Shift (April 2019)
 
 **Dependencies**
 
