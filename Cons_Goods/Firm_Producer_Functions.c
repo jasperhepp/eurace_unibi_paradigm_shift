@@ -1255,7 +1255,8 @@ int Firm_calc_pay_costs()
 {
      FILE *file1;
      char *filename;    
-    int i;
+     int i;
+     double max,min;
     
         /*Pay capital costs*/
 
@@ -1266,16 +1267,36 @@ int Firm_calc_pay_costs()
         LABOUR_COSTS=0.0;
 		LABOUR_COSTS_PRODUCTION = 0.0;
 
+		/*Measure within-firm inequality*/
+		WAGE_SPREAD = 1.0;
+		double_array wages;
+		init_double_array(&wages);
+		min = 1000.0;
+		max = 0.0;
+
 		// Pay labour production costs
         for(i=0; i<EMPLOYEES.size;i++)
         {
             LABOUR_COSTS_PRODUCTION += EMPLOYEES.array[i].wage;
+
+            add_double(&wages,EMPLOYEES.array[i].wage);
+            //printf("\n wage: %f \n",EMPLOYEES.array[i].wage);
+            if(EMPLOYEES.array[i].wage<min)
+            	min = EMPLOYEES.array[i].wage;
+            if(EMPLOYEES.array[i].wage>max)
+            	max = EMPLOYEES.array[i].wage;
 
             add_wage_payment_message(ID,
             EMPLOYEES.array[i].id,EMPLOYEES.array[i].wage,
             TECHNOLOGY,MEAN_SPECIFIC_SKILLS,0,EMPLOYEES.array[i].specific_skill);
               
         }
+
+        // Compute Wage Spread
+        if(EMPLOYEES.size > 0)
+        	WAGE_SPREAD = max/min;
+
+        free_double_array(&wages);
 
 		//Pay R and D costs
 		

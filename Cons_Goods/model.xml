@@ -835,6 +835,11 @@
      <name>last_revenues</name>
      <description></description>
     </variable>
+    <variable>
+     <type>double</type>
+     <name>wage_spread</name>
+     <description>Within-firm inequality: take ratio of highest over lowest wage within the firm</description>
+    </variable>
    </memory>
    <functions>
     <function>
