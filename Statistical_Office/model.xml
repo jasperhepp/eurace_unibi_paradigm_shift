@@ -2742,7 +2742,71 @@
      <name>mean_net_income</name>
      <description>Economy-wide mean net income of households.</description>
     </variable>
-
+	<variable>
+     <type>double</type>
+     <name>gini_wage</name>
+     <description>Gini in terms of households wage.</description>
+    </variable>
+    <variable>
+     <type>double</type>
+     <name>gini_income</name>
+     <description>Gini in terms of households income.</description>
+    </variable>
+    <variable>
+     <type>double</type>
+     <name>gini_wealth</name>
+     <description>Gini in terms of households wealth.</description>
+    </variable>
+    <variable>
+     <type>double</type>
+     <name>gini_specific_skills</name>
+     <description>Gini in terms of specific skills of household.</description>
+    </variable>
+    <variable>
+     <type>double</type>
+     <name>sd_wage</name>
+     <description>Standard deviation wage</description>
+    </variable>
+    <variable>
+     <type>double</type>
+     <name>sd_wage_1</name>
+     <description>Standard deviation wage skill 1</description>
+    </variable>
+    <variable>
+     <type>double</type>
+     <name>sd_wage_2</name>
+     <description>Standard deviation wage skill 2</description>
+    </variable>
+    <variable>
+     <type>double</type>
+     <name>sd_wage_3</name>
+     <description>Standard deviation wage skill 3</description>
+    </variable>
+    <variable>
+     <type>double</type>
+     <name>sd_wage_4</name>
+     <description>Standard deviation wage skill 4</description>
+    </variable>
+    <variable>
+     <type>double</type>
+     <name>sd_wage_5</name>
+     <description>Standard deviation wage skill 5</description>
+    </variable>
+    <variable>
+     <type>double</type>
+     <name>sd_income</name>
+     <description>Standard deviation  income of household</description>
+    </variable>
+    <variable>
+     <type>double</type>
+     <name>sd_wealth</name>
+     <description>Standard deviation wealth</description>
+    </variable>
+    <variable>
+     <type>double</type>
+     <name>sd_specific_skills</name>
+     <description>Standard deviation specific skills household level</description>
+    </variable>
    </memory>
    <functions>
     <function>
@@ -3580,6 +3644,11 @@
     <variable>
      <type>double</type>
      <name>mean_net_income</name>
+     <description></description>
+    </variable>
+    <variable>
+     <type>double</type>
+     <name>wealth</name>
      <description></description>
     </variable>
    </variables>

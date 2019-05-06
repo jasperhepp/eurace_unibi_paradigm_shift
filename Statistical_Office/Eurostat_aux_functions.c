@@ -26,6 +26,169 @@ survival_rate_multiperiod[3600]
 */
 
 
+int cmpfunc (const void * a, const void * b)
+{
+   return ( *(int*)a - *(int*)b );
+}
+
+int compare (const void * a, const void * b){
+	if (*(double*)a > *(double*)b) return 1;
+	  else return -1;
+}
+
+void return_quantile(double_array data, double_array * quantiles, double_array quantiles_pop){
+	int i,j,size,index;
+
+	double *data1, sum;
+	int *quantile_index;
+	size = data.size;
+
+	/*define temp (static) arrays of required size*/
+
+	/*For the sorted data*/
+	data1 = malloc(size*sizeof(double));
+	/*For the quantiles*/
+	quantile_index = malloc(((* quantiles ).size)*sizeof(int));
+
+	for(i=0; i< data.size;i++){
+
+		data1[i] = data.array[i];
+	}
+
+/*Sort ascending*/
+  qsort (data1, data.size, sizeof(double), compare);
+
+  double temp;
+
+  /*Determine the positions of the quantiles -> array of indexes*/
+
+  for(i=0; i < quantiles_pop.size;i++ ){
+
+	  temp=quantiles_pop.array[i]*(data.size-1);
+
+	  quantile_index[i]= floor(temp);
+  }
+
+  /*Determine data values for each quantile and return them*/
+  sum = 0.0;
+  index=1;
+	  for(j=0; j< size;j++){
+
+		  sum += data1[j];
+
+		  if(quantile_index[index]==j){
+
+			  (* quantiles ).array[index] =  sum;
+			  index++;
+		  }
+
+	  }
+
+  for(i=0; i < (* quantiles ).size;i++ ){
+    (* quantiles ).array[i] =  (* quantiles ).array[i] / sum;
+
+    }
+
+
+
+  /*for(i=0; i < (* quantiles ).size;i++ ){
+  (* quantiles ).array[i] =  data1[quantile_index[i]];
+
+  }*/
+
+
+  free(data1);
+  free(quantile_index);
+
+}
+
+double gini_coefficient(double_array  data) {
+
+	int i,j;
+	int number_quantiles =10;
+	double max_value,min_value, dist,area,gini,sum,sum_var;
+
+	double_array quantiles_population;
+	init_double_array(&quantiles_population);
+
+	double_array quantiles_var;
+	init_double_array(&quantiles_var);
+
+	double_array cum_quantiles;
+	init_double_array(&cum_quantiles);
+
+	/*Distance between quantiles*/
+	dist = (double) 1/ (number_quantiles-1);
+
+
+	//printf("dist  %f  number_quantiles %d \n",dist,number_quantiles);
+
+
+	/*Set up arrays*/
+
+	for(i=0; i<number_quantiles;i++){
+
+		add_double(&quantiles_population,(i)*dist);
+		add_double(&quantiles_var,0);
+		add_double(&cum_quantiles,0);
+	}
+
+
+	/*Returns an array of quantiles*/
+	return_quantile(data,&quantiles_var,quantiles_population);
+
+	/*Area below the Lorenz curve*/
+	area = 0;
+	for(i=1; i< quantiles_var.size;i++){
+		area += (quantiles_population.array[i]-quantiles_population.array[i-1])*(0.5*(quantiles_var.array[i]-quantiles_var.array[i-1])+quantiles_var.array[i-1]);
+	}
+
+	/*Gini coefficient:*/
+	gini = (0.5-area)/0.5;
+
+	free_double_array(&quantiles_population);
+	free_double_array(&quantiles_var);
+	free_double_array(&cum_quantiles);
+
+	//printf("gini  %f \n",(0.5-area)/0.5);
+	return gini;
+
+}
+
+double standard_deviation(double_array  data) {
+
+	int i,n;
+	n = data.size;
+
+	double mean=0;
+	double sum_deviation=0;
+
+    for(i=0; i<n;++i)
+    {
+        mean+=data.array[i];
+    }
+
+    mean=mean/n;
+    for(i=0; i<n;++i)
+    sum_deviation+=(data.array[i]-mean)*(data.array[i]-mean);
+    return (sqrt(sum_deviation/n))/mean;
+
+}
+
+double mean(double_array  data) {
+
+	int i,n;
+	n = data.size;
+
+	double mean=0;
+    for(i=0; i<n;++i)
+    {
+        mean+=data.array[i];
+    }
+    return mean=mean/n;
+}
+
+
 /* \fn: void Eurostat_reset_data(void)
  * \brief: Function to reset the region data strucures for firms and households.
  */
@@ -501,6 +664,59 @@ void Eurostat_read_household_data(void)
 	HH_PAYMENT_ACCOUNT = 0.0;
 	MEAN_NET_INCOME	= 0.0;
 	
+	GINI_WAGE = 0.0;
+	GINI_INCOME =  0.0;
+	GINI_WEALTH =  0.0;
+	GINI_SPECIFIC_SKILLS =  0.0;
+
+	double_array wages;
+	init_double_array(&wages);
+	double_array income;
+	init_double_array(&income);
+	double_array wealth;
+	init_double_array(&wealth);
+	double_array specific_skills;
+	init_double_array(&specific_skills);
+
+    START_HOUSEHOLD_SEND_DATA_MESSAGE_LOOP
+
+		if(household_send_data_message->employment_status>0){
+			add_double(&wages,household_send_data_message->wage);
+		}
+		add_double(&income,household_send_data_message->mean_net_income);
+		add_double(&wealth,household_send_data_message->wealth);
+		add_double(&specific_skills,household_send_data_message->specific_skill);
+
+ FINISH_HOUSEHOLD_SEND_DATA_MESSAGE_LOOP
+
+	SD_WAGE = standard_deviation(wages);
+	SD_INCOME =  standard_deviation(income);
+	SD_WEALTH =  standard_deviation(wealth);
+	SD_SPECIFIC_SKILLS =  standard_deviation(specific_skills);
+
+	GINI_WAGE = gini_coefficient(wages);
+	GINI_INCOME =  gini_coefficient(income);
+	GINI_WEALTH =  gini_coefficient(wealth);
+	GINI_SPECIFIC_SKILLS =  gini_coefficient(specific_skills);
+
+
+	free_double_array(&wages);
+	free_double_array(&income);
+	free_double_array(&wealth);
+	free_double_array(&specific_skills);
+
+
+	/* initialize wage arrays for sd_wage_i*/
+	double_array wages1;
+	init_double_array(&wages1);
+	double_array wages2;
+	init_double_array(&wages2);
+	double_array wages3;
+	init_double_array(&wages3);
+	double_array wages4;
+	init_double_array(&wages4);
+	double_array wages5;
+	init_double_array(&wages5);
 
     START_HOUSEHOLD_SEND_DATA_MESSAGE_LOOP
     
@@ -1273,10 +1489,12 @@ void Eurostat_calc_firm_population(void)
     
     START_BANKRUPTCY_ILLIQUIDITY_MESSAGE_LOOP
         NO_FIRM_DEATHS++;
+		printf("\nBANKRUPTCY_ILLIQUIDITY_MESSAGE");
     FINISH_BANKRUPTCY_ILLIQUIDITY_MESSAGE_LOOP    
     
     START_BANKRUPTCY_INSOLVENCY_MESSAGE_LOOP
         NO_FIRM_DEATHS++;
+		printf("\nBANKRUPTCY_INSOLVENCY_MESSAGE");
     FINISH_BANKRUPTCY_INSOLVENCY_MESSAGE_LOOP    
 
 /*
