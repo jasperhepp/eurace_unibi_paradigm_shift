@@ -233,7 +233,7 @@ void Eurostat_reset_data(void)
                 0.0,0.0,                 //monthly_investment_value, investment_gdp_ratio
                 0.0,1.0,1.0,             //gdp, cpi, cpi_last_month 
                 0,0,                     //no_firm_births, no_firm_deaths
-                0,0);                    //productivity_progress, productivity
+                0,0,0.0);                //productivity_progress, productivity and profit_share_ratio
         
         add_household_data(&REGION_HOUSEHOLD_DATA,
                 i,
@@ -1177,10 +1177,17 @@ void Eurostat_calc_macro_data(void)
     int i;
     FILE *file1;
      char *filename;
+
+    double output_first;
+    double output_second;
+    double output_third;
+    double output_fourth;
+
     //Auxiliary sums:
     double sum_total_debt_earnings_ratios;
     double sum_total_debt_equity_ratios;
     double sum_total_labour_share_ratios;
+    double sum_total_labour_costs;
 
     double sum_total_sold_quantity;
     double sum_total_output;
@@ -1190,6 +1197,7 @@ void Eurostat_calc_macro_data(void)
     double sum_region_debt_earnings_ratios;
     double sum_region_debt_equity_ratios;
     double sum_region_labour_share_ratios;
+    double sum_region_labour_costs;
     
     double sum_region_sold_quantity;
     double sum_region_output;
@@ -1206,12 +1214,15 @@ void Eurostat_calc_macro_data(void)
     AVERAGE_DEBT_EARNINGS_RATIO = 0.0;
     AVERAGE_DEBT_EQUITY_RATIO = 0.0;
     LABOUR_SHARE_RATIO = 0.0;
+    PROFIT_SHARE_RATIO = 0.0;
+    CR_FOUR = 0.0;
 
     MONTHLY_SOLD_QUANTITY = 0.0;
     MONTHLY_OUTPUT = 0.0;
     MONTHLY_REVENUE = 0.0;
     MONTHLY_PLANNED_OUTPUT = 0.0;
     MONTHLY_INVESTMENT_VALUE =0.0;
+	MONTHLY_LABOUR_COSTS = 0.0;
 
     //Reset total economy sums: these are updated inside the message loop to sum across all firms
     sum_total_debt_earnings_ratios = 0.0;
@@ -1221,6 +1232,7 @@ void Eurostat_calc_macro_data(void)
     sum_total_output               = 0.0;
     sum_total_cum_revenue          = 0.0;
     sum_total_planned_output       = 0.0;
+	sum_total_labour_costs         = 0.0;
 
 
 	/*****************LABOR MARKET FLOWS****************/
@@ -1261,7 +1273,11 @@ void Eurostat_calc_macro_data(void)
 		MATCHING_RATE = 0.0;
 	}
 
-
+	/* Compute CR4: get 4 largest firms in terms of output.*/
+	output_first 	= 0.0;
+	output_second 	= 0.0;
+	output_third 	= 0.0;
+	output_fourth 	= 0.0;
 
     /*Store the region data of the firms*/
     for(i = 0; i < REGION_FIRM_DATA.size; i++)
@@ -1278,6 +1294,8 @@ void Eurostat_calc_macro_data(void)
         sum_region_output               = 0.0;
         sum_region_cum_revenue          = 0.0;
         sum_region_planned_output       = 0.0;
+		sum_region_labour_costs         = 0.0;
+
 
         //Reading loop
         START_FIRM_SEND_DATA_MESSAGE_LOOP
@@ -1326,12 +1344,9 @@ void Eurostat_calc_macro_data(void)
                 sum_total_debt_equity_ratios += firm_send_data_message->total_debt/firm_send_data_message->equity;
             }
             
-            /***************** average labour share *********************/
-            if (firm_send_data_message->net_earnings>0.0)
-            {               
-                sum_region_labour_share_ratios += firm_send_data_message->average_wage*firm_send_data_message->employees/firm_send_data_message->net_earnings;
-                sum_total_labour_share_ratios += firm_send_data_message->average_wage*firm_send_data_message->employees/firm_send_data_message->net_earnings;
-            }
+            /***************** Sum of: total labour costs *********************/
+            sum_region_labour_costs += firm_send_data_message->labour_costs;
+            sum_total_labour_costs += firm_send_data_message->labour_costs;
             
             /***************** Sum of: total_sold_quantity *********************/
             sum_region_sold_quantity += firm_send_data_message->cum_total_sold_quantity;
@@ -1340,6 +1355,30 @@ void Eurostat_calc_macro_data(void)
             /***************** Sum of: output *********************/
             sum_region_output += firm_send_data_message->output;
             sum_total_output  += firm_send_data_message->output;
+            /***************** Compute four largest firm in terms of cum total sold quantity ****************/
+            if (firm_send_data_message->cum_total_sold_quantity > output_first)
+            {
+            	output_fourth = output_third;
+            	output_third = output_second;
+            	output_second = output_first;
+            	output_first = firm_send_data_message->cum_total_sold_quantity;
+            }
+            else if (firm_send_data_message->cum_total_sold_quantity > output_second)
+            {
+            	output_fourth = output_third;
+            	output_third = output_second;
+            	output_second = firm_send_data_message->cum_total_sold_quantity;
+            }
+            else if (firm_send_data_message->cum_total_sold_quantity > output_third)
+            {
+            	output_fourth = output_third;
+            	output_third = firm_send_data_message->cum_total_sold_quantity;
+            }
+            else if (firm_send_data_message->cum_total_sold_quantity > output_fourth)
+            {
+            	output_fourth = firm_send_data_message->cum_total_sold_quantity;
+            }
+
             
             /***************** Sum of: cum_revenue *********************/                                 
             sum_region_cum_revenue += firm_send_data_message->cum_revenue;
@@ -1355,7 +1394,8 @@ void Eurostat_calc_macro_data(void)
         //Compute regional averages after the regional-specific message loop
         REGION_FIRM_DATA.array[i].average_debt_earnings_ratio = sum_region_debt_earnings_ratios/counter_firms_in_region;
         REGION_FIRM_DATA.array[i].average_debt_equity_ratio = sum_region_debt_equity_ratios/counter_firms_in_region;
-        REGION_FIRM_DATA.array[i].labour_share_ratio = sum_region_labour_share_ratios/counter_firms_in_region;
+        REGION_FIRM_DATA.array[i].labour_share_ratio = sum_region_labour_costs/REGION_FIRM_DATA.array[i].gdp;
+        REGION_FIRM_DATA.array[i].profit_share_ratio = TOTAL_EARNINGS/REGION_FIRM_DATA.array[i].gdp;
         
         REGION_FIRM_DATA.array[i].monthly_sold_quantity = sum_region_sold_quantity;
         REGION_FIRM_DATA.array[i].monthly_output = sum_region_output;
@@ -1367,13 +1407,21 @@ void Eurostat_calc_macro_data(void)
     //Compute total averages after the region for-loop
     AVERAGE_DEBT_EARNINGS_RATIO = sum_total_debt_earnings_ratios/NO_FIRMS;
     AVERAGE_DEBT_EQUITY_RATIO = sum_total_debt_equity_ratios/NO_FIRMS;
-    LABOUR_SHARE_RATIO  = sum_total_labour_share_ratios/NO_FIRMS;
-
+    LABOUR_SHARE_RATIO  = sum_total_labour_costs/GDP;
+    if(TOTAL_EARNINGS < 0.0){
+        PROFIT_SHARE_RATIO = 0.0;
+    }
+    else{
+        PROFIT_SHARE_RATIO = TOTAL_EARNINGS/GDP;
+    }
     MONTHLY_SOLD_QUANTITY = sum_total_sold_quantity;
     MONTHLY_OUTPUT = sum_total_output;
     MONTHLY_REVENUE = sum_total_cum_revenue;
     MONTHLY_PLANNED_OUTPUT = sum_total_planned_output;
     INVESTMENT_GDP_RATIO = MONTHLY_INVESTMENT_VALUE/GDP;
+	MONTHLY_LABOUR_COSTS = sum_total_labour_costs;
+
+	CR_FOUR = (output_first+output_second+output_third+output_fourth)/MONTHLY_SOLD_QUANTITY;
 
 	HERFINDAHL_INDEX =0.0;
 

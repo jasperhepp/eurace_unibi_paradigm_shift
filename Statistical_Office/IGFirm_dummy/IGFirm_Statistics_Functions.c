@@ -146,7 +146,7 @@ int IGFirm_send_data_to_Eurostat()
 		0,0,0,0,
 		0,0, 0,0,0, 0,
 		0,
-		0, 0,	0, 0, 0,0,0, 0, 0, 0, 0, 0, 0,AGE, 0,0,0,0,0,IGFIRM_OUTFLOWS_CALENDAR.total_dividend_payment);
+		0, 0,	0, 0, 0,0,0, 0, 0, 0, 0, 0, 0,AGE, 0,0,0,0,0,IGFIRM_OUTFLOWS_CALENDAR.total_dividend_payment,0.0);
         
     return 0;       
 }

@@ -402,6 +402,11 @@
       <name>productivity</name>
       <description></description>
      </variable>
+     <variable>
+      <type>double</type>
+      <name>profit_share_ratio</name>
+      <description>Profit (after taxes) over GDP. Computed on aggregated level.</description>
+     </variable>
     </variables>
    </dataType>
    <dataType>
@@ -2742,6 +2747,21 @@
      <name>mean_net_income</name>
      <description>Economy-wide mean net income of households.</description>
     </variable>
+        <variable>
+     <type>double</type>
+     <name>profit_share_ratio</name>
+     <description>Profits over GDP, computed on economy level, not on firm level.</description>
+    </variable>
+    <variable>
+     <type>double</type>
+     <name>cr_four</name>
+     <description>four largest output of firms over total output.</description>
+    </variable>
+    <variable>
+     <type>double</type>
+     <name>monthly_labour_costs</name>
+     <description>Constructed Macro Variable: adding up labour costs for all comsuption good firms</description>
+    </variable>
 	<variable>
      <type>double</type>
      <name>gini_wage</name>
@@ -3563,6 +3583,11 @@
     <variable>
      <type>double</type>
      <name>dividends</name>
+     <description></description>
+    </variable>
+    <variable>
+     <type>double</type>
+     <name>labour_costs</name>
      <description></description>
     </variable>
    </variables>
