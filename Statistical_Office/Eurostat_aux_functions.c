@@ -794,6 +794,10 @@ void Eurostat_read_household_data(void)
     
                 AVERAGE_S_SKILL_1 = AVERAGE_S_SKILL_1 + 
                 household_send_data_message->specific_skill;
+
+        		if(household_send_data_message->employment_status>0){
+        			add_double(&wages1,household_send_data_message->wage);
+        		}
                 break;
     
                 case 2:/*General skill level 2*/
@@ -830,6 +834,9 @@ void Eurostat_read_household_data(void)
     
                 AVERAGE_S_SKILL_2 = AVERAGE_S_SKILL_2 + 
                 household_send_data_message->specific_skill;
+        		if(household_send_data_message->employment_status>0){
+        			add_double(&wages2,household_send_data_message->wage);
+        		}
                 break;
     
                 case 3:/*General skill level 3*/
@@ -866,6 +873,9 @@ void Eurostat_read_household_data(void)
     
                 AVERAGE_S_SKILL_3 = AVERAGE_S_SKILL_3 + 
                 household_send_data_message->specific_skill;
+        		if(household_send_data_message->employment_status>0){
+        			add_double(&wages3,household_send_data_message->wage);
+        		}
                 break;
     
                 case 4:/*General skill level 4*/
@@ -902,6 +912,9 @@ void Eurostat_read_household_data(void)
     
                 AVERAGE_S_SKILL_4 = AVERAGE_S_SKILL_4 + 
                 household_send_data_message->specific_skill;
+        		if(household_send_data_message->employment_status>0){
+        			add_double(&wages4,household_send_data_message->wage);
+        		}
                 break;
             
                 case 5:/*General skill level 5*/
@@ -938,11 +951,31 @@ void Eurostat_read_household_data(void)
     
                 AVERAGE_S_SKILL_5 = AVERAGE_S_SKILL_5 + 
                 household_send_data_message->specific_skill;
+        		if(household_send_data_message->employment_status>0){
+        			add_double(&wages5,household_send_data_message->wage);
+        		}
                 break;
                 }
             }
         }
     FINISH_HOUSEHOLD_SEND_DATA_MESSAGE_LOOP
+    /* Compute sd_wage_i for each skill group and each region*/
+	if(NO_EMPLOYEES_SKILL_1 > 0)
+		SD_WAGE_1 = standard_deviation(wages1);
+	if(NO_EMPLOYEES_SKILL_2 > 0)
+		SD_WAGE_2 = standard_deviation(wages2);
+	if(NO_EMPLOYEES_SKILL_3 > 0)
+		SD_WAGE_3 = standard_deviation(wages3);
+	if(NO_EMPLOYEES_SKILL_4 > 0)
+		SD_WAGE_4 = standard_deviation(wages4);
+	if(NO_EMPLOYEES_SKILL_5 > 0)
+		SD_WAGE_5 = standard_deviation(wages5);
+
+    free_double_array(&wages1);
+    free_double_array(&wages2);
+    free_double_array(&wages3);
+    free_double_array(&wages4);
+    free_double_array(&wages5);
 }
 
 /* \fn: void Eurostat_compute_region_household_data(void)
@@ -1416,6 +1449,8 @@ void Eurostat_calc_macro_data(void)
     }
     MONTHLY_SOLD_QUANTITY = sum_total_sold_quantity;
     MONTHLY_OUTPUT = sum_total_output;
+    if(sum_total_output == 0)
+    	printf("ZERO OUTPUT");
     MONTHLY_REVENUE = sum_total_cum_revenue;
     MONTHLY_PLANNED_OUTPUT = sum_total_planned_output;
     INVESTMENT_GDP_RATIO = MONTHLY_INVESTMENT_VALUE/GDP;

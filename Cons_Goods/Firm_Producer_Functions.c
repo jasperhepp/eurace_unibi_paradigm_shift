@@ -1250,7 +1250,7 @@ return 0;
 
 
 /** \fn Firm_calc_pay_costs()
- * \brief In this function the firm receives the purchased investment goods and pays the goods and  the wage bill. Additionally, the new mean wage and tthe new average specific skill level is     computed. */
+ * \brief In this function the firm receives the purchased investment goods and pays the goods and  the wage bill. Additionally, the new mean wage and the new average specific skill level is computed. */
 int Firm_calc_pay_costs()
 {
      FILE *file1;
@@ -1340,7 +1340,9 @@ int Firm_calc_pay_costs()
 			CUM_R_D_INVESTMENTS +=LABOUR_COSTS_INNOVATION;
         
             UNIT_COSTS=(LABOUR_COSTS_PRODUCTION + LABOUR_COSTS_INNOVATION  +CALC_CAPITAL_COSTS + TOTAL_INTEREST_PAYMENT) / PRODUCTION_QUANTITY;
-    
+
+            UNIT_LABOUR_COSTS = (LABOUR_COSTS_PRODUCTION + LABOUR_COSTS_INNOVATION)/PRODUCTION_QUANTITY;
+
             if(PRICE_LAST_MONTH<1e-5 )
 		    {	
             PRICE_LAST_MONTH = PRICE;

@@ -570,6 +570,11 @@
     </variable>
     <variable>
      <type>double</type>
+     <name>unit_labour_costs</name>
+     <description>Labour costs per unit of the consumption good</description>
+    </variable>
+    <variable>
+     <type>double</type>
      <name>total_supply</name>
      <description>The sum of local inventory and produced output gives the total supplied quantity</description>
     </variable>
