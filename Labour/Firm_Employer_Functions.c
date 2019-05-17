@@ -1254,8 +1254,8 @@ int Firm_compute_mean_wage_specific_skills()
 	double no_employees = (double) NO_EMPLOYEES_PRODUCTION;
 	if(no_employees==0)
 	{
-		MEAN_WAGE = WAGE_OFFER;
-		MEAN_SPECIFIC_SKILLS = 1.5;
+		MEAN_WAGE = WAGE_OFFER * AVERAGE_S_SKILL_FROM_EUROSTAT;
+		MEAN_SPECIFIC_SKILLS = AVERAGE_S_SKILL_FROM_EUROSTAT;
 	}
 	/*If the firm has  employees calculate the mean wage and mean specific skills.*/
 	else

@@ -162,6 +162,7 @@ int IGFirm_innovation_process()
 	}
 	else//Innovation progress has a predetermined shape: 3 cases, with low, medium and high tech progress
 	{
+		printf("Check for arrival of new vintage.");
 		if(STRENGHT_OF_TECH_PROGRESS ==2)
 		{
 
@@ -180,7 +181,7 @@ int IGFirm_innovation_process()
 				add_vintage(&VINTAGES,PRODUCTIVITY, CAPITAL_GOOD_PRICE,0,0);
 
 				add_adt_sales_per_vintage(&SALES_PER_VINTAGE,PRODUCTIVITY, 0.0,0.0 );
-				printf("INNOVATION 2 in vintage folder test2\n");
+				printf("Innovation 2; array MEDIUM with new productivity %f \n",PRODUCTIVITY);
 			}
 		}else if(STRENGHT_OF_TECH_PROGRESS==3)
 		{
@@ -199,12 +200,12 @@ int IGFirm_innovation_process()
 				add_vintage(&VINTAGES,PRODUCTIVITY, CAPITAL_GOOD_PRICE,0,0);
 
 				add_adt_sales_per_vintage(&SALES_PER_VINTAGE,PRODUCTIVITY, 0.0,0.0 );
-				printf("INNOVATION 3 HIGH in vintage folder test2\n");
+				printf("Innovation 3; array HIGH with new productivity %f \n",PRODUCTIVITY);
 			}
 
 		}else if(STRENGHT_OF_TECH_PROGRESS==4)  // paradigm shift with higher probability of invention
 		{
-			if(DAY>6000)
+			if(DAY>5000+TRANSITION_PHASE)
 			{
 				printf("After the paradigm shift at day %d \n",DAY);
 
@@ -223,7 +224,7 @@ int IGFirm_innovation_process()
 						add_vintage(&VINTAGES,PRODUCTIVITY, CAPITAL_GOOD_PRICE,0,0);
 
 						add_adt_sales_per_vintage(&SALES_PER_VINTAGE,PRODUCTIVITY, 0.0,0.0 );
-						printf("Innovation: High after Paradigm Shift with new Productivity %f \n",PRODUCTIVITY);
+						printf("Innovation 4; array LOW with new productivity %f \n",PRODUCTIVITY);
 					}
 			}
 			else
@@ -243,13 +244,13 @@ int IGFirm_innovation_process()
 					add_vintage(&VINTAGES,PRODUCTIVITY, CAPITAL_GOOD_PRICE,0,0);
 
 					add_adt_sales_per_vintage(&SALES_PER_VINTAGE,PRODUCTIVITY, 0.0,0.0 );
-					printf("Innovation: Low before paradigm shift with new Productivity %f \n",PRODUCTIVITY);
+					printf("Innovation 4; array MEDIUM with new productivity %f \n",PRODUCTIVITY);
 
 				}
 				if(DAY==TRANSITION_PHASE+INNOVATION_SHEME_LOW_PROGRESS.array[0])
 				{
 					remove_int(&INNOVATION_SHEME_LOW_PROGRESS,0);
-					printf("NO Innovation high but remove entry from vintage array\n");
+					printf("NO Innovation 2; remove from array LOW\n");
 				}
 			}
 
@@ -274,7 +275,7 @@ int IGFirm_innovation_process()
 						add_vintage(&VINTAGES,PRODUCTIVITY, CAPITAL_GOOD_PRICE,0,0);
 
 						add_adt_sales_per_vintage(&SALES_PER_VINTAGE,PRODUCTIVITY, 0.0,0.0 );
-						printf("Innovation: Low after Paradigm Shift with double Productivity Increment %f \n",PRODUCTIVITY);
+						printf("Innovation array Low (1) after Paradigm Shift with double Productivity Increment %f \n",PRODUCTIVITY);
 					}
 			}
 			else
@@ -294,13 +295,13 @@ int IGFirm_innovation_process()
 					add_vintage(&VINTAGES,PRODUCTIVITY, CAPITAL_GOOD_PRICE,0,0);
 
 					add_adt_sales_per_vintage(&SALES_PER_VINTAGE,PRODUCTIVITY, 0.0,0.0 );
-					printf("Innovation: Low before paradigm shift with new Productivity %f \n",PRODUCTIVITY);
+					printf("Innovation array Low (1) before paradigm shift with new Productivity %f \n",PRODUCTIVITY);
 
 				}
 				if(DAY==TRANSITION_PHASE+INNOVATION_SHEME_LOW_PROGRESS.array[0])
 				{
 					remove_int(&INNOVATION_SHEME_LOW_PROGRESS,0);
-					printf("NO Innovation high but remove entry from vintage array\n");
+					printf("NO Innovation in array high (3) but remove entry from vintage array\n");
 				}
 			}
 		}
