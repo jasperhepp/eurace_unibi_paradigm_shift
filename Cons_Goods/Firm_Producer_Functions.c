@@ -5,7 +5,25 @@
 #include "../Labour/Labour_aux_headers.h"
 
 /* Library functions */
+double standard_deviation2(double_array  data) {
 
+	int i,n;
+	n = data.size;
+
+	double mean=0;
+	double sum_deviation=0;
+
+    for(i=0; i<n;++i)
+    {
+        mean+=data.array[i];
+    }
+
+    mean=mean/n;
+    for(i=0; i<n;++i)
+    sum_deviation+=(data.array[i]-mean)*(data.array[i]-mean);
+    return (sqrt(sum_deviation/n))/mean;
+
+}
 /** \fn Firm_calc_input_demands_2(), auxiliary function
  * \brief Firms recalculate the labor demand and the demand for capital goods
  * such that these can be financed with the external finances obtained.
@@ -1262,7 +1280,7 @@ int Firm_calc_pay_costs()
 		LABOUR_COSTS_PRODUCTION = 0.0;
 
 		/*Measure within-firm inequality*/
-		WAGE_SPREAD = 1.0;
+		SD_WAGE_IN_FIRM = 0;
 		double_array wages;
 		init_double_array(&wages);
 		min = 1000.0;
@@ -1286,9 +1304,8 @@ int Firm_calc_pay_costs()
               
         }
 
-        // Compute Wage Spread
         if(EMPLOYEES.size > 0)
-        	WAGE_SPREAD = max/min;
+        	SD_WAGE_IN_FIRM = standard_deviation2(wages);
 
         free_double_array(&wages);
 

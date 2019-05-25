@@ -842,8 +842,8 @@
     </variable>
     <variable>
      <type>double</type>
-     <name>wage_spread</name>
-     <description>Within-firm inequality: take ratio of highest over lowest wage within the firm</description>
+     <name>sd_wage_in_firm</name>
+     <description>Within-firm inequality: standard deviation of wages with firm (in percentage of the mean)</description>
     </variable>
    </memory>
    <functions>

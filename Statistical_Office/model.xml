@@ -2814,6 +2814,11 @@
     </variable>
     <variable>
      <type>double</type>
+     <name>sd_wage_btw_firm</name>
+     <description>Standard deviation of btw firm average wages (weigthed with employment share) </description>
+    </variable>
+    <variable>
+     <type>double</type>
      <name>sd_income</name>
      <description>Standard deviation  income of household</description>
     </variable>

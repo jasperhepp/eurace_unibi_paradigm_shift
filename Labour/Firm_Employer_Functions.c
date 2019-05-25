@@ -1291,7 +1291,7 @@ int Firm_compute_mean_wage_specific_skills()
 	/*Compute the total mean wage (Mean wage of both types of employees)*/
 	if(NO_EMPLOYEES > 0)
 	{
-		TOTAL_MEAN_WAGE = no_employees_r_and_d/(1.0*NO_EMPLOYEES)*MEAN_WAGE + MEAN_WAGE_R_AND_D*no_employees/(1.0*NO_EMPLOYEES);
+		TOTAL_MEAN_WAGE = no_employees_r_and_d/(1.0*NO_EMPLOYEES)*MEAN_WAGE_R_AND_D + MEAN_WAGE*no_employees/(1.0*NO_EMPLOYEES);
 	}else
 	{
 		TOTAL_MEAN_WAGE=MEAN_WAGE;

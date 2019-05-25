@@ -170,8 +170,34 @@ double standard_deviation(double_array  data) {
 
     mean=mean/n;
     for(i=0; i<n;++i)
-    sum_deviation+=(data.array[i]-mean)*(data.array[i]-mean);
+    	sum_deviation+=(data.array[i]-mean)*(data.array[i]-mean);
     return (sqrt(sum_deviation/n))/mean;
+
+}
+
+double standard_deviation_weight(double_array  data, double_array weight) {
+	// assumes that both have same length and there is no zero entry in array weight
+	// gives weighted standard deviation as percentage of weighted mean
+	int i,n,m;
+	m = 0;
+	n = data.size;
+
+	double mean				= 0;
+	double sum_deviation	= 0;
+	double sum_w			= 0;
+
+    for(i=0; i<n;++i)
+    {
+        mean 	+= data.array[i]*weight.array[i];
+        sum_w 	+= weight.array[i];
+        if (weight.array[i] != 0.0)
+        	m += 1;
+    }
+
+    mean	= mean/sum_w;
+    for(i=0; i<n;++i)
+    	sum_deviation 	+= (data.array[i]-mean) * (data.array[i]-mean) * weight.array[i];
+    return (sqrt(sum_deviation*m/((m-1)*sum_w)))/mean;
 
 }
 
@@ -307,6 +333,11 @@ void Eurostat_read_firm_data(void)
     NO_FIRMS =0;
     NO_ACTIVE_FIRMS=0;
 
+    double_array wages;
+    init_double_array(&wages);
+    double_array weights;
+    init_double_array(&weights);
+
     for(i = 0; i < REGION_FIRM_DATA.size; i++)
     {
         REGION_FIRM_DATA.array[i].no_firms = 0;
@@ -371,12 +402,15 @@ void Eurostat_read_firm_data(void)
                 firm_send_data_message->average_wage*
                 firm_send_data_message->employees;
             FIRM_AVERAGE_WAGE += firm_send_data_message->average_wage*
-                firm_send_data_message->employees_production;
-			FIRM_AVERAGE_PRODUCTION_WAGE += firm_send_data_message->average_wage_production*
                 firm_send_data_message->employees;
+			FIRM_AVERAGE_PRODUCTION_WAGE += firm_send_data_message->average_wage_production*
+                firm_send_data_message->employees_production;
     		FIRM_AVERAGE_R_AND_D_WAGE += firm_send_data_message->average_wage_r_and_d*
                 firm_send_data_message->employees_r_and_d;
     
+            add_double(&wages,firm_send_data_message->average_wage);
+            add_double(&weights,firm_send_data_message->employees);
+
             /********sum of specific skills of the firms++++++++*/
             REGION_FIRM_DATA.array[i].average_s_skill += 
                 firm_send_data_message->average_s_skill *
@@ -431,26 +465,29 @@ void Eurostat_read_firm_data(void)
             REGION_FIRM_DATA.array[i].productivity += firm_send_data_message->firm_productivity;
             FIRM_AVERAGE_PRODUCTIVITY += firm_send_data_message->firm_productivity;
 
-		if(firm_send_data_message->age!=-1)
-		{
-		FIRM_AVERAGE_QUALITY+= firm_send_data_message->quality;
-		FIRM_AVERAGE_PRICE+= firm_send_data_message->price;
-		}
+            if(firm_send_data_message->age!=-1)
+            {
+            	FIRM_AVERAGE_QUALITY+= firm_send_data_message->quality;
+            	FIRM_AVERAGE_PRICE+= firm_send_data_message->price;
+            }
 
 
-	 TOTAL_CAPITAL_STOCK_UNITS += firm_send_data_message->units_capital_stock;
- 	 TOTAL_VALUE_MALL_INVENTORIES += firm_send_data_message->value_inventory;
-    	 TOTAL_DIVIDENDS+=firm_send_data_message->dividends;	 
-		if(NO_ACTIVE_FIRMS>1)
-        	 BASE_WAGE_OFFER +=firm_send_data_message->base_wage_offer/(NO_ACTIVE_FIRMS-1) ;
+			TOTAL_CAPITAL_STOCK_UNITS += firm_send_data_message->units_capital_stock;
+			TOTAL_VALUE_MALL_INVENTORIES += firm_send_data_message->value_inventory;
+			TOTAL_DIVIDENDS+=firm_send_data_message->dividends;
+			if(NO_ACTIVE_FIRMS>1)
+				BASE_WAGE_OFFER +=firm_send_data_message->base_wage_offer/(NO_ACTIVE_FIRMS-1) ;
    
         }
-
-
 		
         FINISH_FIRM_SEND_DATA_MESSAGE_LOOP
         
     }
+
+    SD_WAGE_BTW_FIRM = standard_deviation_weight(wages,weights);
+
+    free_double_array(&wages);
+    free_double_array(&weights);
 }
     
 /* \fn: void Eurostat_compute_region_firm_data(void)
