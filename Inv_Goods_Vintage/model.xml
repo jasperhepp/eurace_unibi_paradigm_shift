@@ -102,6 +102,11 @@
     <name>strenght_of_tech_progress</name>
     <description>This sets the strenght of tech. progress if it is predetermined. 1 is low, 2 is medium, and 3 is high.</description>
    </variable>
+   <variable>
+    <type>int</type>
+    <name>paradigm_shift</name>
+    <description>Day at which paradigm shift occurs (only relevant for strenght_of_tech_progress 4,5,6..., not for 1,2,3)</description>
+   </variable>
  <variable>
     <type>double</type>
     <name>linear_combination_pricing_ig_good</name>
