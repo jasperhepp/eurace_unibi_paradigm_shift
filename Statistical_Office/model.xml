@@ -2832,6 +2832,31 @@
      <name>sd_specific_skills</name>
      <description>Standard deviation specific skills household level</description>
     </variable>
+    <variable>
+     <type>double</type>
+     <name>sd_specific_skills_1</name>
+     <description>Standard deviation specific skills household g-skill 1</description>
+    </variable>
+    <variable>
+     <type>double</type>
+     <name>sd_specific_skills_2</name>
+     <description>Standard deviation specific skills household g-skill 2</description>
+    </variable>
+    <variable>
+     <type>double</type>
+     <name>sd_specific_skills_3</name>
+     <description>Standard deviation specific skills household g-skill 3</description>
+    </variable>
+    <variable>
+     <type>double</type>
+     <name>sd_specific_skills_4</name>
+     <description>Standard deviation specific skills household g-skill 4</description>
+    </variable>
+    <variable>
+     <type>double</type>
+     <name>sd_specific_skills_5</name>
+     <description>Standard deviation specific skills household g-skill 5</description>
+    </variable>
    </memory>
    <functions>
     <function>

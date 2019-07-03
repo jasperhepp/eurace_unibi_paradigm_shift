@@ -755,6 +755,18 @@ void Eurostat_read_household_data(void)
 	double_array wages5;
 	init_double_array(&wages5);
 
+	/* initialize wage arrays for sd_specific_skills_i*/
+	double_array specific_skills1;
+	init_double_array(&specific_skills1);
+	double_array specific_skills2;
+	init_double_array(&specific_skills2);
+	double_array specific_skills3;
+	init_double_array(&specific_skills3);
+	double_array specific_skills4;
+	init_double_array(&specific_skills4);
+	double_array specific_skills5;
+	init_double_array(&specific_skills5);
+
     START_HOUSEHOLD_SEND_DATA_MESSAGE_LOOP
     
         /*Store the global/region data of the households*/
@@ -832,6 +844,9 @@ void Eurostat_read_household_data(void)
                 AVERAGE_S_SKILL_1 = AVERAGE_S_SKILL_1 + 
                 household_send_data_message->specific_skill;
 
+                add_double(&specific_skills1,household_send_data_message->specific_skill);
+
+
         		if(household_send_data_message->employment_status>0){
         			add_double(&wages1,household_send_data_message->wage);
         		}
@@ -871,6 +886,9 @@ void Eurostat_read_household_data(void)
     
                 AVERAGE_S_SKILL_2 = AVERAGE_S_SKILL_2 + 
                 household_send_data_message->specific_skill;
+
+                add_double(&specific_skills2,household_send_data_message->specific_skill);
+
         		if(household_send_data_message->employment_status>0){
         			add_double(&wages2,household_send_data_message->wage);
         		}
@@ -910,6 +928,9 @@ void Eurostat_read_household_data(void)
     
                 AVERAGE_S_SKILL_3 = AVERAGE_S_SKILL_3 + 
                 household_send_data_message->specific_skill;
+
+                add_double(&specific_skills3,household_send_data_message->specific_skill);
+
         		if(household_send_data_message->employment_status>0){
         			add_double(&wages3,household_send_data_message->wage);
         		}
@@ -949,6 +970,9 @@ void Eurostat_read_household_data(void)
     
                 AVERAGE_S_SKILL_4 = AVERAGE_S_SKILL_4 + 
                 household_send_data_message->specific_skill;
+
+                add_double(&specific_skills4,household_send_data_message->specific_skill);
+
         		if(household_send_data_message->employment_status>0){
         			add_double(&wages4,household_send_data_message->wage);
         		}
@@ -988,6 +1012,9 @@ void Eurostat_read_household_data(void)
     
                 AVERAGE_S_SKILL_5 = AVERAGE_S_SKILL_5 + 
                 household_send_data_message->specific_skill;
+
+                add_double(&specific_skills5,household_send_data_message->specific_skill);
+
         		if(household_send_data_message->employment_status>0){
         			add_double(&wages5,household_send_data_message->wage);
         		}
@@ -1013,6 +1040,18 @@ void Eurostat_read_household_data(void)
     free_double_array(&wages3);
     free_double_array(&wages4);
     free_double_array(&wages5);
+
+    SD_SPECIFIC_SKILLS_1 = standard_deviation(specific_skills1);
+    SD_SPECIFIC_SKILLS_2 = standard_deviation(specific_skills2);
+    SD_SPECIFIC_SKILLS_3 = standard_deviation(specific_skills3);
+    SD_SPECIFIC_SKILLS_4 = standard_deviation(specific_skills4);
+    SD_SPECIFIC_SKILLS_5 = standard_deviation(specific_skills5);
+
+    free_double_array(&specific_skills1);
+    free_double_array(&specific_skills2);
+    free_double_array(&specific_skills3);
+    free_double_array(&specific_skills4);
+    free_double_array(&specific_skills5);
 }
 
 /* \fn: void Eurostat_compute_region_household_data(void)
@@ -1495,7 +1534,7 @@ void Eurostat_calc_macro_data(void)
 
 	CR_FOUR = (output_first+output_second+output_third+output_fourth)/MONTHLY_SOLD_QUANTITY;
 
-	HERFINDAHL_INDEX =0.0;
+	HERFINDAHL_INDEX = 0.0;
 
 	START_FIRM_SEND_DATA_MESSAGE_LOOP
 
