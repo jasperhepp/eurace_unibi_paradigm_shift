@@ -1,6 +1,6 @@
 # The Eurace@Unibi Model
 
-This is the source code of the Eurace@Unibi Model. 
+This is a fork of the source code of the Eurace@Unibi Model. 
 
 The original source code is modified and displays the Paradigm Shift Version.
 
@@ -111,7 +111,7 @@ How to cite
 --
 Any publication that contains results derived from the Eurace@Unibi Soutrce Code must contain the following (or similar) acknowledgement:
 
-This work uses (a modified version of) the Eurace@Unibi model source code, developed by Herbert Dawid, Simon Gemkow, Philipp Harting, Sander van der Hoog and Michael Neugart. More details on the Eurace@Unibi model can be found in these publications:
+This work uses the Eurace@Unibi model source code, developed by Herbert Dawid, Simon Gemkow, Philipp Harting, Sander van der Hoog and Michael Neugart. More details on the Eurace@Unibi model can be found in these publications:
 
 Dawid, H., Harting, P., van der Hoog, S., & Neugart, M. (2018a). Macroeconomics with heterogeneous agent models: Fostering transparency, reproducibility and replication. Journal of Evolutionary Economics. DOI:10.4119/unibi/2902981
 
