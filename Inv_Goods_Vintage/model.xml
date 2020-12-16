@@ -38,6 +38,11 @@
     <description>Gives the increase of productivity of an innovation if igfirm is switch off.</description>
    </variable>
    <variable>
+    <type>double</type>
+    <name>igfirm_scale_exogenous_productivity_progress_ps</name>
+    <description>Multiplies the increase of productivity of an innovation during paradigm shift period.</description>
+   </variable>
+   <variable>
     <type>int</type>
     <name>symmetric_shock</name>
     <description>Binary parameter to set if the energy shock is symmetric.</description>
@@ -141,7 +146,7 @@
       <type>int</type>
       <name>vintage</name>
       <description></description>
-     </variable>
+     </variable>	
     </variables>
    </dataType>
 <dataType>
@@ -167,7 +172,7 @@
       <type>double</type>
       <name>sales</name>
       <description></description>
-     </variable>
+     </variable>	
     </variables>
    </dataType>
   <dataType>
@@ -188,7 +193,7 @@
       <type>double</type>
       <name>revenue</name>
       <description></description>
-     </variable>
+     </variable>		
     </variables>
    </dataType>
 
@@ -344,26 +349,6 @@
      <name>innovation_sheme_high_progress</name>
      <description>This is the innovation sheme if high technological progress is selected</description>
     </variable>
-		<variable>
-     <type>int_array</type>
-     <name>innovation_sheme_progress_1</name>
-     <description>This is the innovation sheme for p = 1/30</description>
-    </variable>
-		<variable>
-     <type>int_array</type>
-     <name>innovation_sheme_progress_2</name>
-     <description>This is the innovation sheme for p = 1/20</description>
-    </variable>
-		<variable>
-     <type>int_array</type>
-     <name>innovation_sheme_progress_3</name>
-     <description>This is the innovation sheme for p = 1/15</description>
-    </variable>
-		<variable>
-     <type>int_array</type>
-     <name>innovation_sheme_progress_4</name>
-     <description>This is the innovation sheme for p = 1/10</description>
-    </variable>
  <variable>
      <type>double</type>
      <name>mean_general_skills</name>
@@ -470,7 +455,7 @@
         <phase>a.day_of_month_to_act</phase>
        </time>
       </not>
-     </condition>
+     </condition>	
      <inputs/>
      <outputs/>
 	</function>
@@ -545,7 +530,7 @@
      <type>int</type>
      <name>vintage</name>
      <description></description>
-    </variable>
+    </variable>	
    </variables>
   </message>
   <message>

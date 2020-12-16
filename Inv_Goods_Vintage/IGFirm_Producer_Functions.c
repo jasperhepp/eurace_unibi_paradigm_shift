@@ -6,9 +6,9 @@
 #include "../my_library_header.h"
 
 /* External defined GSL random generator: see main.c */
-extern gsl_rng * FLAME_GSL_RNG;
+extern gsl_rng * FLAME_GSL_RNG;  
 
-extern int FLAME_GSL_SEED;
+extern int FLAME_GSL_SEED;  
 extern int FLAME_GSL_GEN_NO;
 
 /***************************** Investment Goods producer function********************************/
@@ -18,54 +18,54 @@ int IGFirm_initialize_variables()
 {
 	int i;
 
-		if(LAST_SALES.size== 6)
-		{
-			remove_double(&LAST_SALES,0);
+	if(LAST_SALES.size== 6)
+	{
+		remove_double(&LAST_SALES,0);
 
-		}
-		add_double(&LAST_SALES,SALES);
+	}
+	add_double(&LAST_SALES,SALES);
 
-		MEAN_SALES_LAST_MONTHS=0.0;
-		for(i=0; i< LAST_SALES.size;i++)
-		{
-			MEAN_SALES_LAST_MONTHS+= LAST_SALES.array[i];
-		}
+	MEAN_SALES_LAST_MONTHS=0.0;
+	for(i=0; i< LAST_SALES.size;i++)
+	{
+		MEAN_SALES_LAST_MONTHS+= LAST_SALES.array[i];
+	}
 
-		if(LAST_SALES.size>0)
-		{
-			MEAN_SALES_LAST_MONTHS = MEAN_SALES_LAST_MONTHS/(1.0*LAST_SALES.size);
-		}
+	if(LAST_SALES.size>0)
+	{
+		MEAN_SALES_LAST_MONTHS = MEAN_SALES_LAST_MONTHS/(1.0*LAST_SALES.size);
+	}
 
 
 
-		CAPITAL_GOOD_DEMAND_LAST_MONTH = CAPITAL_GOOD_DEMAND;
-		CAPITAL_GOOD_DEMAND = 0.0;
-		SALES_LAST_MONTH = SALES;
-		SALES = 0.0;
+	CAPITAL_GOOD_DEMAND_LAST_MONTH = CAPITAL_GOOD_DEMAND;
+	CAPITAL_GOOD_DEMAND = 0.0;
+	SALES_LAST_MONTH = SALES;
+	SALES = 0.0;
 #
 
 
-		MEAN_PRODUCTIVITY_OF_SALES = 0.0;
+	MEAN_PRODUCTIVITY_OF_SALES = 0.0;
 
-		double sum_sales = 0.0;
-		for(i=0;i<VINTAGES.size;i++)
-		{
-			sum_sales += VINTAGES.array[i].sales;
-			MEAN_PRODUCTIVITY_OF_SALES +=  VINTAGES.array[i].productivity*VINTAGES.array[i].sales;
-		}
-		if(sum_sales > 0)
-		{
-			MEAN_PRODUCTIVITY_OF_SALES = MEAN_PRODUCTIVITY_OF_SALES/ sum_sales;
-		}else
-		{
-			MEAN_PRODUCTIVITY_OF_SALES =0.0;
-		}
-		RATIO_SOLD_PRODUCTIVITY_BEST_PRACTICE = MEAN_PRODUCTIVITY_OF_SALES/PRODUCTIVITY ;
+	double sum_sales = 0.0;
+	for(i=0;i<VINTAGES.size;i++)
+	{
+		sum_sales += VINTAGES.array[i].sales;
+		MEAN_PRODUCTIVITY_OF_SALES +=  VINTAGES.array[i].productivity*VINTAGES.array[i].sales;
+	}
+	if(sum_sales > 0)
+	{
+		MEAN_PRODUCTIVITY_OF_SALES = MEAN_PRODUCTIVITY_OF_SALES/ sum_sales;
+	}else
+	{
+		MEAN_PRODUCTIVITY_OF_SALES =0.0;
+	}
+	RATIO_SOLD_PRODUCTIVITY_BEST_PRACTICE = MEAN_PRODUCTIVITY_OF_SALES/PRODUCTIVITY ;
 
-		CUM_REVENUE = 0.0;
+	CUM_REVENUE = 0.0;
 
 
-return 0;
+	return 0;
 
 }
 
@@ -99,9 +99,9 @@ int IGFirm_innovation_process()
 	{
 		/*If transition phase is over. During the transition phase there is no productivity progress.*/
 		if(DAY >= TRANSITION_PHASE)
- 		{
+		{
 			if(DAY%MONTH == DAY_OF_MONTH_TO_ACT)
-			{
+			{	
 
 				if(SWITCH_IGFIRM_ENDOGENOUS_INNOVATION_PROBABILITY==1)
 				{
@@ -118,19 +118,19 @@ int IGFirm_innovation_process()
 					if(i < IGFIRM_ENDOGENOUS_INNOVATION_PROBABILITY)
 					{
 						PRODUCTIVITY = PRODUCTIVITY*(1 + IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS);
-						CAPITAL_GOOD_PRICE =
-						CAPITAL_GOOD_PRICE*(1 +IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS);
+						CAPITAL_GOOD_PRICE = 
+								CAPITAL_GOOD_PRICE*(1 +IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS);
 
 						//add new one:
-						add_vintage(&VINTAGES,PRODUCTIVITY, CAPITAL_GOOD_PRICE,0,0);
+						add_vintage(&VINTAGES,PRODUCTIVITY, CAPITAL_GOOD_PRICE,0,0);	
 
 						add_adt_sales_per_vintage(&SALES_PER_VINTAGE,PRODUCTIVITY, 0.0,0.0 );
 
 						if(IG_GOOD_LIMITED_OFFER == 1 && VINTAGES.size >= MAX_OFFER_IG_GOOD)
 						{
-							//remove last entry (oldest vintage)
+							//remove last entry (oldest vintage)				
 							remove_vintage(&VINTAGES,0);
-						}
+						}		
 
 
 
@@ -148,16 +148,16 @@ int IGFirm_innovation_process()
 					if(i < IGFIRM_EXOGENOUS_INNOVATION_PROBABILITY)
 					{
 						PRODUCTIVITY = PRODUCTIVITY*(1 + IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS);
-						CAPITAL_GOOD_PRICE =
-						CAPITAL_GOOD_PRICE*(1 +IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS);
+						CAPITAL_GOOD_PRICE = 
+								CAPITAL_GOOD_PRICE*(1 +IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS);
 
 						//add new one:
-						add_vintage(&VINTAGES,PRODUCTIVITY, CAPITAL_GOOD_PRICE,0,0);
+						add_vintage(&VINTAGES,PRODUCTIVITY, CAPITAL_GOOD_PRICE,0,0);	
 
 						add_adt_sales_per_vintage(&SALES_PER_VINTAGE,PRODUCTIVITY, 0.0,0.0 );
 					}
 				}
-	 		}
+			}
 		}
 	}
 	else//Innovation progress has a predetermined shape: 3 cases, with low, medium and high tech progress; 3 new cases with paradigm shift
@@ -172,7 +172,7 @@ int IGFirm_innovation_process()
 				PRODUCTIVITY =PRODUCTIVITY*(1+IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS);
 
 				CAPITAL_GOOD_PRICE = CAPITAL_GOOD_PRICE*(1
-				+IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS);
+						+IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS);
 
 				remove_int(&INNOVATION_SHEME_MEDIUM_PROGRESS,0);
 
@@ -191,7 +191,7 @@ int IGFirm_innovation_process()
 				PRODUCTIVITY =PRODUCTIVITY*(1+IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS);
 
 				CAPITAL_GOOD_PRICE = CAPITAL_GOOD_PRICE*(1
-				+IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS);
+						+IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS);
 
 				remove_int(&INNOVATION_SHEME_HIGH_PROGRESS,0);
 
@@ -211,22 +211,22 @@ int IGFirm_innovation_process()
 			{
 
 				if(DAY==TRANSITION_PHASE+INNOVATION_SHEME_LOW_PROGRESS.array[0])
-					{
-						prod_progress =PRODUCTIVITY*IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS;
+				{
+					prod_progress =PRODUCTIVITY*IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS;
 
-						PRODUCTIVITY =PRODUCTIVITY*(1+IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS);
+					PRODUCTIVITY =PRODUCTIVITY*(1+IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS);
 
-						CAPITAL_GOOD_PRICE = CAPITAL_GOOD_PRICE*(1
-						+IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS);
+					CAPITAL_GOOD_PRICE = CAPITAL_GOOD_PRICE*(1
+							+IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS);
 
-						remove_int(&INNOVATION_SHEME_LOW_PROGRESS,0);
+					remove_int(&INNOVATION_SHEME_LOW_PROGRESS,0);
 
-						//add new one:
-						add_vintage(&VINTAGES,PRODUCTIVITY, CAPITAL_GOOD_PRICE,0,0);
+					//add new one:
+					add_vintage(&VINTAGES,PRODUCTIVITY, CAPITAL_GOOD_PRICE,0,0);
 
-						add_adt_sales_per_vintage(&SALES_PER_VINTAGE,PRODUCTIVITY, 0.0,0.0 );
-						printf("Innovation 4; array LOW with new productivity %f \n",PRODUCTIVITY);
-					}
+					add_adt_sales_per_vintage(&SALES_PER_VINTAGE,PRODUCTIVITY, 0.0,0.0 );
+					printf("Innovation 4; array LOW with new productivity %f \n",PRODUCTIVITY);
+				}
 			}
 			else
 			{
@@ -237,7 +237,7 @@ int IGFirm_innovation_process()
 					PRODUCTIVITY =PRODUCTIVITY*(1+IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS);
 
 					CAPITAL_GOOD_PRICE = CAPITAL_GOOD_PRICE*(1
-					+IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS);
+							+IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS);
 
 					remove_int(&INNOVATION_SHEME_MEDIUM_PROGRESS,0);
 
@@ -263,22 +263,22 @@ int IGFirm_innovation_process()
 			if(DAY>PARADIGM_SHIFT+TRANSITION_PHASE)
 			{
 				if(DAY==TRANSITION_PHASE+INNOVATION_SHEME_LOW_PROGRESS.array[0])
-					{
-						prod_progress =PRODUCTIVITY*IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS*2;
+				{
+					prod_progress =PRODUCTIVITY*IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS*2;
 
-						PRODUCTIVITY =PRODUCTIVITY*(1+IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS*2);
+					PRODUCTIVITY =PRODUCTIVITY*(1+IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS*2);
 
-						CAPITAL_GOOD_PRICE = CAPITAL_GOOD_PRICE*(1
-						+IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS*2);
+					CAPITAL_GOOD_PRICE = CAPITAL_GOOD_PRICE*(1
+							+IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS*2);
 
-						remove_int(&INNOVATION_SHEME_LOW_PROGRESS,0);
+					remove_int(&INNOVATION_SHEME_LOW_PROGRESS,0);
 
-						//add new one:
-						add_vintage(&VINTAGES,PRODUCTIVITY, CAPITAL_GOOD_PRICE,0,0);
+					//add new one:
+					add_vintage(&VINTAGES,PRODUCTIVITY, CAPITAL_GOOD_PRICE,0,0);
 
-						add_adt_sales_per_vintage(&SALES_PER_VINTAGE,PRODUCTIVITY, 0.0,0.0 );
-						printf("Innovation array Low (1) after Paradigm Shift with double Productivity Increment %f \n",PRODUCTIVITY);
-					}
+					add_adt_sales_per_vintage(&SALES_PER_VINTAGE,PRODUCTIVITY, 0.0,0.0 );
+					printf("Innovation array Low (1) after Paradigm Shift with double Productivity Increment %f \n",PRODUCTIVITY);
+				}
 			}
 			else
 			{
@@ -289,7 +289,7 @@ int IGFirm_innovation_process()
 					PRODUCTIVITY =PRODUCTIVITY*(1+IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS);
 
 					CAPITAL_GOOD_PRICE = CAPITAL_GOOD_PRICE*(1
-					+IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS);
+							+IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS);
 
 					remove_int(&INNOVATION_SHEME_MEDIUM_PROGRESS,0);
 
@@ -307,36 +307,19 @@ int IGFirm_innovation_process()
 				}
 			}
 		}
-		else if(STRENGHT_OF_TECH_PROGRESS==6) // paradigm shift with higher increment and higher probability
+		else if(STRENGHT_OF_TECH_PROGRESS==6)  // paradigm shift for whole time, then back to slow growth regime
 		{
-			if(DAY == PARADIGM_SHIFT+TRANSITION_PHASE)
-				printf("Paradigm Shift at %d \n",DAY);
+			if(DAY == PARADIGM_SHIFT+TRANSITION_PHASE){
+				printf("Paradigm Shift 11 at %d \n",DAY);
 
-
-			if(DAY>PARADIGM_SHIFT+TRANSITION_PHASE)
-			{
-				//printf("After the paradigm shift at day %d \n",DAY);
-
-				if(DAY==TRANSITION_PHASE+INNOVATION_SHEME_HIGH_PROGRESS.array[0])
-					{
-						prod_progress =PRODUCTIVITY*IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS*2;
-
-						PRODUCTIVITY =PRODUCTIVITY*(1+IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS*2);
-
-						CAPITAL_GOOD_PRICE = CAPITAL_GOOD_PRICE*(1
-						+IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS*2);
-
-						remove_int(&INNOVATION_SHEME_HIGH_PROGRESS,0);
-
-						//add new one:
-						add_vintage(&VINTAGES,PRODUCTIVITY, CAPITAL_GOOD_PRICE,0,0);
-
-						add_adt_sales_per_vintage(&SALES_PER_VINTAGE,PRODUCTIVITY, 0.0,0.0 );
-						printf("Innovation: High after Paradigm Shift with double Productivity Increment %f \n",PRODUCTIVITY);
-					}
 			}
-			else
+
+			if(DAY == 10000 + PARADIGM_SHIFT+TRANSITION_PHASE)
+				printf("Paradigm Shift switch back at %d \n",DAY);
+
+			if(DAY>PARADIGM_SHIFT + TRANSITION_PHASE && DAY<10000 + PARADIGM_SHIFT + TRANSITION_PHASE)
 			{
+
 				if(DAY==TRANSITION_PHASE+INNOVATION_SHEME_LOW_PROGRESS.array[0])
 				{
 					prod_progress =PRODUCTIVITY*IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS;
@@ -344,7 +327,7 @@ int IGFirm_innovation_process()
 					PRODUCTIVITY =PRODUCTIVITY*(1+IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS);
 
 					CAPITAL_GOOD_PRICE = CAPITAL_GOOD_PRICE*(1
-					+IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS);
+							+IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS);
 
 					remove_int(&INNOVATION_SHEME_LOW_PROGRESS,0);
 
@@ -352,96 +335,150 @@ int IGFirm_innovation_process()
 					add_vintage(&VINTAGES,PRODUCTIVITY, CAPITAL_GOOD_PRICE,0,0);
 
 					add_adt_sales_per_vintage(&SALES_PER_VINTAGE,PRODUCTIVITY, 0.0,0.0 );
-					printf("Innovation: Low before paradigm shift with new Productivity %f \n",PRODUCTIVITY);
-
+					printf("Innovation 11; array LOW with new productivity %f \n",PRODUCTIVITY);
 				}
-				if(DAY==TRANSITION_PHASE+INNOVATION_SHEME_HIGH_PROGRESS.array[0])
+
+			}
+			else
+			{
+				if(DAY==TRANSITION_PHASE+INNOVATION_SHEME_MEDIUM_PROGRESS.array[0] || DAY==TRANSITION_PHASE+INNOVATION_SHEME_MEDIUM_PROGRESS.array[0] + 10000)
 				{
-					remove_int(&INNOVATION_SHEME_HIGH_PROGRESS,0);
-					printf("NO Innovation high but remove entry from vintage array\n");
+					prod_progress =PRODUCTIVITY*IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS;
+
+					PRODUCTIVITY =PRODUCTIVITY*(1+IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS);
+
+					CAPITAL_GOOD_PRICE = CAPITAL_GOOD_PRICE*(1
+							+IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS);
+
+					remove_int(&INNOVATION_SHEME_MEDIUM_PROGRESS,0);
+
+					//add new one:
+					add_vintage(&VINTAGES,PRODUCTIVITY, CAPITAL_GOOD_PRICE,0,0);
+
+					add_adt_sales_per_vintage(&SALES_PER_VINTAGE,PRODUCTIVITY, 0.0,0.0 );
+					printf("Innovation 11; array MEDIUM with new productivity %f \n",PRODUCTIVITY);
+
+				}
+				if(DAY==TRANSITION_PHASE+INNOVATION_SHEME_LOW_PROGRESS.array[0])
+				{
+					remove_int(&INNOVATION_SHEME_LOW_PROGRESS,0);
+					printf("NO Innovation 11; remove from array LOW\n");
 				}
 			}
-		} // end paradigm shift variations, begin sheme 1 2 3 4
-		else if(STRENGHT_OF_TECH_PROGRESS==11)
+		}
+		else if(STRENGHT_OF_TECH_PROGRESS==10)  // paradigm shift for some time, then back
 		{
-			if(DAY==TRANSITION_PHASE+INNOVATION_SHEME_PROGRESS_1.array[0])
+			if(DAY == PARADIGM_SHIFT+TRANSITION_PHASE)
+				printf("Paradigm Shift at %d \n",DAY);
+
+			if(DAY == 13600)
+				printf("Paradigm Shift switch back at %d \n",DAY);
+
+			if(DAY>PARADIGM_SHIFT+TRANSITION_PHASE && DAY < 13600) //
 			{
-				prod_progress =PRODUCTIVITY*IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS;
 
-				PRODUCTIVITY =PRODUCTIVITY*(1+IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS);
+				if(DAY==TRANSITION_PHASE+INNOVATION_SHEME_LOW_PROGRESS.array[0])
+				{
+					prod_progress =PRODUCTIVITY*IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS;
 
-				CAPITAL_GOOD_PRICE = CAPITAL_GOOD_PRICE*(1
-				+IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS);
+					PRODUCTIVITY =PRODUCTIVITY*(1+IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS);
 
-				remove_int(&INNOVATION_SHEME_PROGRESS_1,0);
+					CAPITAL_GOOD_PRICE = CAPITAL_GOOD_PRICE*(1
+							+IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS);
 
-				//add new one:
-				add_vintage(&VINTAGES,PRODUCTIVITY, CAPITAL_GOOD_PRICE,0,0);
+					remove_int(&INNOVATION_SHEME_LOW_PROGRESS,0);
 
-				add_adt_sales_per_vintage(&SALES_PER_VINTAGE,PRODUCTIVITY, 0.0,0.0 );
-				printf("Innovation 1, new productivity %f \n",PRODUCTIVITY);
+					//add new one:
+					add_vintage(&VINTAGES,PRODUCTIVITY, CAPITAL_GOOD_PRICE,0,0);
+
+					add_adt_sales_per_vintage(&SALES_PER_VINTAGE,PRODUCTIVITY, 0.0,0.0 );
+					printf("Innovation 10; array LOW with new productivity %f \n",PRODUCTIVITY);
+				}
+
+				if(DAY==TRANSITION_PHASE+INNOVATION_SHEME_MEDIUM_PROGRESS.array[0])
+				{
+					remove_int(&INNOVATION_SHEME_MEDIUM_PROGRESS,0);
+					printf("NO Innovation 10; remove from array MEDIUM\n");
+				}
 			}
-		} // end inno 1 array
-		else if(STRENGHT_OF_TECH_PROGRESS==12)
+			else
+			{
+				if(DAY==TRANSITION_PHASE+INNOVATION_SHEME_MEDIUM_PROGRESS.array[0])
+				{
+					prod_progress =PRODUCTIVITY*IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS;
+
+					PRODUCTIVITY =PRODUCTIVITY*(1+IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS);
+
+					CAPITAL_GOOD_PRICE = CAPITAL_GOOD_PRICE*(1
+							+IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS);
+
+					remove_int(&INNOVATION_SHEME_MEDIUM_PROGRESS,0);
+
+					//add new one:
+					add_vintage(&VINTAGES,PRODUCTIVITY, CAPITAL_GOOD_PRICE,0,0);
+
+					add_adt_sales_per_vintage(&SALES_PER_VINTAGE,PRODUCTIVITY, 0.0,0.0 );
+					printf("Innovation 10; array MEDIUM with new productivity %f \n",PRODUCTIVITY);
+
+				}
+				if(DAY==TRANSITION_PHASE+INNOVATION_SHEME_LOW_PROGRESS.array[0])
+				{
+					remove_int(&INNOVATION_SHEME_LOW_PROGRESS,0);
+					printf("NO Innovation 10; remove from array LOW\n");
+				}
+			}
+		}
+		else if(STRENGHT_OF_TECH_PROGRESS==20)  // paradigm shift for some time: scale up increment
 		{
-			if(DAY==TRANSITION_PHASE+INNOVATION_SHEME_PROGRESS_2.array[0])
+			if(DAY == PARADIGM_SHIFT+TRANSITION_PHASE)
+				printf("Paradigm Shift at %d \n",DAY);
+
+			if(DAY == 2*PARADIGM_SHIFT+TRANSITION_PHASE)
+				printf("Paradigm Shift switch back at %d \n",DAY);
+
+			if(DAY>PARADIGM_SHIFT+TRANSITION_PHASE && DAY < 3600+PARADIGM_SHIFT+TRANSITION_PHASE) //
 			{
-				prod_progress =PRODUCTIVITY*IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS;
 
-				PRODUCTIVITY =PRODUCTIVITY*(1+IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS);
+				if(DAY==TRANSITION_PHASE+INNOVATION_SHEME_MEDIUM_PROGRESS.array[0])
+				{
+					prod_progress =PRODUCTIVITY*IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS*IGFIRM_SCALE_EXOGENOUS_PRODUCTIVITY_PROGRESS_PS;
 
-				CAPITAL_GOOD_PRICE = CAPITAL_GOOD_PRICE*(1
-				+IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS);
+					PRODUCTIVITY =PRODUCTIVITY*(1+IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS*IGFIRM_SCALE_EXOGENOUS_PRODUCTIVITY_PROGRESS_PS);
 
-				remove_int(&INNOVATION_SHEME_PROGRESS_2,0);
+					CAPITAL_GOOD_PRICE = CAPITAL_GOOD_PRICE*(1
+							+IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS*IGFIRM_SCALE_EXOGENOUS_PRODUCTIVITY_PROGRESS_PS);
 
-				//add new one:
-				add_vintage(&VINTAGES,PRODUCTIVITY, CAPITAL_GOOD_PRICE,0,0);
+					remove_int(&INNOVATION_SHEME_MEDIUM_PROGRESS,0);
 
-				add_adt_sales_per_vintage(&SALES_PER_VINTAGE,PRODUCTIVITY, 0.0,0.0 );
-				printf("Innovation 2, new productivity %f \n",PRODUCTIVITY);
+					//add new one:
+					add_vintage(&VINTAGES,PRODUCTIVITY, CAPITAL_GOOD_PRICE,0,0);
+
+					add_adt_sales_per_vintage(&SALES_PER_VINTAGE,PRODUCTIVITY, 0.0,0.0 );
+					printf("Innovation 20; array MEDIUM with new productivity %f \n",PRODUCTIVITY);
+				}
 			}
-		} // end inno 2 array
-		else if(STRENGHT_OF_TECH_PROGRESS==13)
-		{
-			if(DAY==TRANSITION_PHASE+INNOVATION_SHEME_PROGRESS_3.array[0])
+			else
 			{
-				prod_progress =PRODUCTIVITY*IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS;
+				if(DAY==TRANSITION_PHASE+INNOVATION_SHEME_MEDIUM_PROGRESS.array[0])
+				{
+					prod_progress =PRODUCTIVITY*IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS;
 
-				PRODUCTIVITY =PRODUCTIVITY*(1+IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS);
+					PRODUCTIVITY =PRODUCTIVITY*(1+IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS);
 
-				CAPITAL_GOOD_PRICE = CAPITAL_GOOD_PRICE*(1
-				+IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS);
+					CAPITAL_GOOD_PRICE = CAPITAL_GOOD_PRICE*(1
+							+IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS);
 
-				remove_int(&INNOVATION_SHEME_PROGRESS_3,0);
+					remove_int(&INNOVATION_SHEME_MEDIUM_PROGRESS,0);
 
-				//add new one:
-				add_vintage(&VINTAGES,PRODUCTIVITY, CAPITAL_GOOD_PRICE,0,0);
+					//add new one:
+					add_vintage(&VINTAGES,PRODUCTIVITY, CAPITAL_GOOD_PRICE,0,0);
 
-				add_adt_sales_per_vintage(&SALES_PER_VINTAGE,PRODUCTIVITY, 0.0,0.0 );
-				printf("Innovation 3, new productivity %f \n",PRODUCTIVITY);
+					add_adt_sales_per_vintage(&SALES_PER_VINTAGE,PRODUCTIVITY, 0.0,0.0 );
+					printf("Innovation 20; array MEDIUM with new productivity %f \n",PRODUCTIVITY);
+
+				}
 			}
-		} // end inno 3 array
-		else if(STRENGHT_OF_TECH_PROGRESS==14)
-		{
-			if(DAY==TRANSITION_PHASE+INNOVATION_SHEME_PROGRESS_4.array[0])
-			{
-				prod_progress =PRODUCTIVITY*IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS;
-
-				PRODUCTIVITY =PRODUCTIVITY*(1+IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS);
-
-				CAPITAL_GOOD_PRICE = CAPITAL_GOOD_PRICE*(1
-				+IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS);
-
-				remove_int(&INNOVATION_SHEME_PROGRESS_4,0);
-
-				//add new one:
-				add_vintage(&VINTAGES,PRODUCTIVITY, CAPITAL_GOOD_PRICE,0,0);
-
-				add_adt_sales_per_vintage(&SALES_PER_VINTAGE,PRODUCTIVITY, 0.0,0.0 );
-				printf("Innovation 4, new productivity %f \n",PRODUCTIVITY);
-			}
-		} // end inno 4 array
+		}
 		else
 		{
 
@@ -452,7 +489,7 @@ int IGFirm_innovation_process()
 				PRODUCTIVITY =PRODUCTIVITY*(1+IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS);
 
 				CAPITAL_GOOD_PRICE = CAPITAL_GOOD_PRICE*(1
-				+IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS);
+						+IGFIRM_EXOGENOUS_PRODUCTIVITY_PROGRESS);
 
 				remove_int(&INNOVATION_SHEME_LOW_PROGRESS,0);
 
@@ -471,13 +508,14 @@ int IGFirm_innovation_process()
 		}
 	}
 
-return 0;
-}
+
+	return 0;
+}	
 
 
 /** \fn IGFirm_update_productivity_price()
  * \brief IGFirm sets the prices of the vintages and sends quality and price information to the consumption goods producer.
-	*/
+ */
 int IGFirm_set_price_send_info()
 {
 
@@ -485,7 +523,7 @@ int IGFirm_set_price_send_info()
 	double  price_worst_vintage_last_month, discounted_productivity_worst_vintage_last_month, sum, s_skills;
 
 	price_worst_vintage_last_month= VINTAGES.array[0].price;
-    discounted_productivity_worst_vintage_last_month = VINTAGES.array[0].discounted_productivity;
+	discounted_productivity_worst_vintage_last_month = VINTAGES.array[0].discounted_productivity;
 
 	/*IGFirm sends the producitivity and the capital good price to the consumption good firms.*/
 
@@ -496,7 +534,7 @@ int IGFirm_set_price_send_info()
 	for(i=0;i<VINTAGES.size;i++)
 	{
 
-	//printf("ECONOMY_WIDE_SPECIFIC_SKILLS_IN_FIRMS %f\n",ECONOMY_WIDE_SPECIFIC_SKILLS_IN_FIRMS);
+		//printf("ECONOMY_WIDE_SPECIFIC_SKILLS_IN_FIRMS %f\n",ECONOMY_WIDE_SPECIFIC_SKILLS_IN_FIRMS);
 
 		// here we compute the discounted sum of productivites over a planning period
 		sum =0.0;
@@ -504,60 +542,60 @@ int IGFirm_set_price_send_info()
 		for(j=0;j<24;j++)
 		{
 			if(SKILL_UPDATE_ACC_TO_FORMULA==1)
-				{
-      				/*Update the specific skill: depends on the actual specific skill,
+			{
+				/*Update the specific skill: depends on the actual specific skill,
         			the gap between the actual specific skills and the actual productivity of the employer,
         			and the general skill which determines the speed of closing the this gap.*/
-       				s_skills = max(s_skills,s_skills+ (VINTAGES.array[i].productivity - s_skills)
-				*((1-pow(0.5,1/(20+0.25*(ECONOMY_WIDE_GENERAL_SKILLS_IN_FIRMS-1)*(4-20))))));
-				}else
-				{
-	 			 /*Update the specific skill: depends on the actual specific skill,
+				s_skills = max(s_skills,s_skills+ (VINTAGES.array[i].productivity - s_skills)
+						*((1-pow(0.5,1/(20+0.25*(ECONOMY_WIDE_GENERAL_SKILLS_IN_FIRMS-1)*(4-20))))));
+			}else
+			{
+				/*Update the specific skill: depends on the actual specific skill,
        				the gap between the actual specific skills and the actual productivity of the employer. The rate is predetermined.*/
 
 
-					double x1 = (ECONOMY_WIDE_GENERAL_SKILLS_IN_FIRMS - LIST_ADAPTATION_SPEED.array[0].general_skill_level)
-						/( 1.0*LIST_ADAPTATION_SPEED.array[LIST_ADAPTATION_SPEED.size-1].general_skill_level- 1.0*LIST_ADAPTATION_SPEED.array[0].general_skill_level);
+				double x1 = (ECONOMY_WIDE_GENERAL_SKILLS_IN_FIRMS - LIST_ADAPTATION_SPEED.array[0].general_skill_level)
+																																		/( 1.0*LIST_ADAPTATION_SPEED.array[LIST_ADAPTATION_SPEED.size-1].general_skill_level- 1.0*LIST_ADAPTATION_SPEED.array[0].general_skill_level);
 
-					MEAN_ADAPTATION_SPEED =LIST_ADAPTATION_SPEED.array[0].adaptation_speed + x1*
-						(LIST_ADAPTATION_SPEED.array[LIST_ADAPTATION_SPEED.size-1].adaptation_speed - LIST_ADAPTATION_SPEED.array[0].adaptation_speed);
-
-
-
-      				s_skills = max(s_skills, s_skills+ (VINTAGES.array[i].productivity - s_skills)*MEAN_ADAPTATION_SPEED);
-
-				}
+				MEAN_ADAPTATION_SPEED =LIST_ADAPTATION_SPEED.array[0].adaptation_speed + x1*
+						(LIST_ADAPTATION_SPEED.array[LIST_ADAPTATION_SPEED.size-1].adaptation_speed - LIST_ADAPTATION_SPEED.array[0].adaptation_speed);		
 
 
 
-		sum+= pow(1/(1+DISCONT_RATE),j)*min(VINTAGES.array[i].productivity, s_skills );
+				s_skills = max(s_skills, s_skills+ (VINTAGES.array[i].productivity - s_skills)*MEAN_ADAPTATION_SPEED);
+
+			}
+
+
+
+			sum+= pow(1/(1+DISCONT_RATE),j)*min(VINTAGES.array[i].productivity, s_skills );
 		}
 
 
-	VINTAGES.array[i].discounted_productivity = sum;
+		VINTAGES.array[i].discounted_productivity = sum;
 
-//printf("VINTAGES.array[i].discounted_productivity %f discounted_productivity_worst_vintage_last_month %f  price_worst_vintage_last_month %f\n", VINTAGES.array[i].discounted_productivity,discounted_productivity_worst_vintage_last_month, price_worst_vintage_last_month);
+		//printf("VINTAGES.array[i].discounted_productivity %f discounted_productivity_worst_vintage_last_month %f  price_worst_vintage_last_month %f\n", VINTAGES.array[i].discounted_productivity,discounted_productivity_worst_vintage_last_month, price_worst_vintage_last_month);
 
-	//Compute new price: Price is a linear combination ofproductivity gains and costs
-
-
+		//Compute new price: Price is a linear combination ofproductivity gains and costs
 
 
-	//printf("UNIT_COSTS: %f	PRODUCTIVITY_PROGRESS: %f\n",UNIT_COSTS,PRODUCTIVITY_PROGRESS_IN_ECONOMY);
 
 
-	if(DAY>1)
-	VINTAGES.array[i].price= (1-LINEAR_COMBINATION_PRICING_IG_GOOD)*price_worst_vintage_last_month * VINTAGES.array[i].discounted_productivity  /discounted_productivity_worst_vintage_last_month
-+ LINEAR_COMBINATION_PRICING_IG_GOOD* UNIT_COSTS;
+		//printf("UNIT_COSTS: %f	PRODUCTIVITY_PROGRESS: %f\n",UNIT_COSTS,PRODUCTIVITY_PROGRESS_IN_ECONOMY);
 
-	//printf("VINTAGES.array[%d].price:	%f\n",i,VINTAGES.array[i].price);
+
+		if(DAY>1)
+			VINTAGES.array[i].price= (1-LINEAR_COMBINATION_PRICING_IG_GOOD)*price_worst_vintage_last_month * VINTAGES.array[i].discounted_productivity  /discounted_productivity_worst_vintage_last_month
+			+ LINEAR_COMBINATION_PRICING_IG_GOOD* UNIT_COSTS;
+
+		//printf("VINTAGES.array[%d].price:	%f\n",i,VINTAGES.array[i].price);
 
 		//Send the message:
 		add_productivity_message(ID,VINTAGES.array[i].productivity,VINTAGES.array[i].price);
 
 	}
 
-	// Store the price and productivity outside the array for plotting
+	// Store the price and productivity outside the array for plotting  
 	PRODUCTIVITY = VINTAGES.array[VINTAGES.size-1].productivity;
 	CAPITAL_GOOD_PRICE = VINTAGES.array[VINTAGES.size-1].price;
 
@@ -596,39 +634,39 @@ int IGFirm_receive_order_delivers_capital_goods()
 
 	int v,i;
 	double daily_capital_good_demand = 0.0;
-	double daily_sales = 0.0;
+	double daily_sales = 0.0;	
 
 
-	/*Initialize a temporary capital_good_request array in order to store the incoming request messages.*/
+	/*Initialize a temporary capital_good_request array in order to store the incoming request messages.*/	
 	capital_good_request_array capital_good_request_list;
-	init_capital_good_request_array(&capital_good_request_list);
+	init_capital_good_request_array(&capital_good_request_list); 
 
 
 
 	/*Clean the vintage sales array on first day of month*/
 	if(DAY%MONTH==1)
 	{
-	for(i=0;i<SALES_PER_VINTAGE.size;i++)
+		for(i=0;i<SALES_PER_VINTAGE.size;i++)
 		{
 			SALES_PER_VINTAGE.array[i].sales=0.0;
 			SALES_PER_VINTAGE.array[i].revenue=0.0;
 		}
 
-	for(i=0;i<VINTAGES.size;i++)
+		for(i=0;i<VINTAGES.size;i++)
 		{
-		VINTAGES.array[i].sales=0;
-		}
+			VINTAGES.array[i].sales=0;
+		}	
 
 	}
 
 	START_CAPITAL_GOOD_REQUEST_MESSAGE_LOOP
 
-		/*Store the IDs and quanities*/
-		add_capital_good_request(&capital_good_request_list,
-		capital_good_request_message->firm_id,
-		capital_good_request_message->capital_good_demand,capital_good_request_message->vintage );
+	/*Store the IDs and quanities*/
+	add_capital_good_request(&capital_good_request_list,
+			capital_good_request_message->firm_id,
+			capital_good_request_message->capital_good_demand,capital_good_request_message->vintage );
 
-		daily_capital_good_demand += capital_good_request_message->capital_good_demand;
+	daily_capital_good_demand += capital_good_request_message->capital_good_demand;
 
 	FINISH_CAPITAL_GOOD_REQUEST_MESSAGE_LOOP
 
@@ -641,29 +679,29 @@ int IGFirm_receive_order_delivers_capital_goods()
 	{
 		/*Send the capital goods to the consumption good producers.*/
 		add_capital_good_delivery_message(
-		capital_good_request_list.array[v].firm_id,
-		capital_good_request_list.array[v].capital_good_order,
-		VINTAGES.array[capital_good_request_list.array[v].vintage].productivity,
-		VINTAGES.array[capital_good_request_list.array[v].vintage].price);
+				capital_good_request_list.array[v].firm_id,
+				capital_good_request_list.array[v].capital_good_order,
+				VINTAGES.array[capital_good_request_list.array[v].vintage].productivity,
+				VINTAGES.array[capital_good_request_list.array[v].vintage].price);
 
 		/*Increase the sales by the sold quantity.*/
 		SALES += capital_good_request_list.
-		array[v].capital_good_order;
+				array[v].capital_good_order;
 		VINTAGES.array[capital_good_request_list.array[v].vintage].sales+=capital_good_request_list.array[v].capital_good_order;
 
 		daily_sales += capital_good_request_list.
-		array[v].capital_good_order;
+				array[v].capital_good_order;
 		/*Compute sales and revenues for all vintages*/
 		for(i=0;i<SALES_PER_VINTAGE.size;i++)
 		{
 			if(SALES_PER_VINTAGE.array[i].productivity_of_vintage==VINTAGES.array[capital_good_request_list.array[v].vintage].productivity)
 			{
 				SALES_PER_VINTAGE.array[i].sales +=capital_good_request_list.array[v].capital_good_order;
-				SALES_PER_VINTAGE.array[i].revenue+=capital_good_request_list.array[v].capital_good_order*VINTAGES.array[capital_good_request_list.array[v].vintage].price;
+				SALES_PER_VINTAGE.array[i].revenue+=capital_good_request_list.array[v].capital_good_order*VINTAGES.array[capital_good_request_list.array[v].vintage].price;	
 				break;
 			}
 
-		}
+		}		
 
 
 	}
@@ -700,12 +738,12 @@ int IGFirm_calc_revenue()
 
 	START_PAY_CAPITAL_GOODS_MESSAGE_LOOP
 
-		REVENUE_PER_DAY += pay_capital_goods_message->capital_bill;
+	REVENUE_PER_DAY += pay_capital_goods_message->capital_bill;
 
-	FINISH_PAY_CAPITAL_GOODS_MESSAGE_LOOP
+	FINISH_PAY_CAPITAL_GOODS_MESSAGE_LOOP  
 
 
-	CUM_REVENUE += REVENUE_PER_DAY;
+	CUM_REVENUE += REVENUE_PER_DAY; 
 	PAYMENT_ACCOUNT += REVENUE_PER_DAY;
 	CUM_REVENUE_LAST_MONTH +=REVENUE_PER_DAY;
 	IGFIRM_INFLOWS_CALENDAR.cum_revenue += REVENUE_PER_DAY;
@@ -724,3 +762,11 @@ int IGFirm_idle()
 {
 	return 0;
 }
+
+
+
+
+
+
+
+
