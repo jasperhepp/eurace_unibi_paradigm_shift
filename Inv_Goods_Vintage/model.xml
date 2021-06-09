@@ -110,9 +110,14 @@
    <variable>
     <type>int</type>
     <name>paradigm_shift</name>
-    <description>Day at which paradigm shift occurs (only relevant for strenght_of_tech_progress 4,5,6..., not for 1,2,3)</description>
+    <description>Day at which paradigm shift occurs</description>
    </variable>
- <variable>
+ 	<variable>
+    <type>int</type>
+    <name>exp_tech_scenario</name>
+    <description>Tech scenario experiment: 0 baseline, 1 frequency, 2 increment</description>
+   </variable>
+   <variable>
     <type>double</type>
     <name>linear_combination_pricing_ig_good</name>
     <description>This sets the weights of the linear combination for the ig price setting.</description>
@@ -348,6 +353,26 @@
      <type>int_array</type>
      <name>innovation_sheme_high_progress</name>
      <description>This is the innovation sheme if high technological progress is selected</description>
+    </variable>
+    <variable>
+     <type>int_array</type>
+     <name>innovation_sheme_1</name>
+     <description>This is the innovation sheme if technological progress 101 is selected</description>
+    </variable>
+    <variable>
+     <type>int_array</type>
+     <name>innovation_sheme_2</name>
+     <description>This is the innovation sheme if technological progress 102 is selected</description>
+    </variable>
+    <variable>
+     <type>int_array</type>
+     <name>innovation_sheme_3</name>
+     <description>This is the innovation sheme if technological progress 103 is selected</description>
+    </variable>
+    <variable>
+     <type>int_array</type>
+     <name>innovation_sheme_4</name>
+     <description>This is the innovation sheme if technological progress 104 is selected</description>
     </variable>
  <variable>
      <type>double</type>
